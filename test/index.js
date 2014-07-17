@@ -5,6 +5,7 @@ var mkdirp = require('mkdirp');
 var rmdir = require('rmdir');
 var connect = require('connect');
 var request = require('supertest');
+var expect = require('chai').expect;
 
 describe('custom route middleware', function() {
   afterEach(function (done) {
@@ -120,6 +121,26 @@ describe('custom route middleware', function() {
         .get('/subdir/anything/here')
         .expect(200)
         .expect('test')
+        .end(done);
+    });
+    
+    it('overrides the exists method', function (done) {
+      var existsCalled = false;
+      var app = connect()
+        .use(customRoutes({
+          '/test': '/index.html'
+        }, {
+          exists: function () {
+            existsCalled = true;
+            return false;
+          }
+        }));
+      
+      request(app)
+        .get('/test')
+        .expect(function () {
+          expect(existsCalled).to.equal(true);
+        })
         .end(done);
     });
   });

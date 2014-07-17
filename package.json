@@ -1,6 +1,6 @@
 {
   "name": "superstatic-routes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Superstatic custom routes middleware",
   "main": "index.js",
   "directories": {

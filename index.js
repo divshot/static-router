@@ -11,7 +11,7 @@ module.exports = function (routeDefinitions, options) {
   var root = options.root || process.cwd();
   var indexFile = options.index || 'index.html';
   
-  if(options.isFile) isFile = options.isFile;
+  if(options.exists) exists = options.exists;
   
   return function (req, res, next) {
     var pathname = url.parse(req.url).pathname;
@@ -23,13 +23,13 @@ module.exports = function (routeDefinitions, options) {
     filepath = directoryIndex(filepath, indexFile);
     var fullpath = path.join(root, filepath);
     
-    if (!isFile(filepath)) return next();
+    if (!exists(filepath)) return next();
     
     req.url = fullpath;
     deliver(req).pipe(res);
   };
   
-  function isFile (filepath) {
+  function exists (filepath) {
     var fullpath = path.join(root, filepath);
     
     if (!fs.existsSync(fullpath)) return false;
