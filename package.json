@@ -1,0 +1,28 @@
+{
+  "name": "superstatic-routes",
+  "version": "0.1.0",
+  "description": "Superstatic custom routes middleware",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/ --reporter dot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:divshot/superstatic-routes.git"
+  },
+  "keywords": [
+    "divshot",
+    "superstatic",
+    "routes",
+    "static"
+  ],
+  "author": "Divshot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/divshot/superstatic-routes/issues"
+  },
+  "homepage": "https://github.com/divshot/superstatic-routes"
+}
