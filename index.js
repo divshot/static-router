@@ -4,6 +4,8 @@ var slash = require('slasher');
 var globject = require('globject');
 var url = require('fast-url-parser');
 var deliver = require('deliver');
+var directoryIndex = require('directory-index');
+var fileExists = require('file-exists');
 
 module.exports = function (routeDefinitions, options) {
   options = options || {};
@@ -11,7 +13,7 @@ module.exports = function (routeDefinitions, options) {
   var root = options.root || process.cwd();
   var indexFile = options.index || 'index.html';
   
-  if(options.exists) exists = options.exists;
+  if(options.exists) fileExists = options.exists;
   
   return function (req, res, next) {
     var pathname = url.parse(req.url).pathname;
@@ -23,27 +25,9 @@ module.exports = function (routeDefinitions, options) {
     filepath = directoryIndex(filepath, indexFile);
     var fullpath = path.join(root, filepath);
     
-    if (!exists(filepath)) return next();
+    if (!fileExists(filepath, {root: root})) return next();
     
     req.url = fullpath;
     deliver(req).pipe(res);
   };
-  
-  function exists (filepath) {
-    var fullpath = path.join(root, filepath);
-    
-    if (!fs.existsSync(fullpath)) return false;
-    if (!fs.statSync(fullpath).isFile()) return false;
-    
-    return true;
-  }
 };
-
-function directoryIndex (filepath, index) {
-  // Serve the index file of a directory
-  if (filepath && path.extname(filepath) !== '.html') {
-    filepath = path.join(slash(filepath), index);
-  }
-  
-  return filepath;
-}
