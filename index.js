@@ -6,6 +6,7 @@ var url = require('fast-url-parser');
 var deliver = require('deliver');
 var directoryIndex = require('directory-index');
 var fileExists = require('file-exists');
+var mime = require('mime-types');
 
 module.exports = function (routeDefinitions, options) {
   options = options || {};
@@ -28,6 +29,8 @@ module.exports = function (routeDefinitions, options) {
     if (!fileExists(filepath, {root: root})) return next();
     
     req.url = fullpath;
-    deliver(req).pipe(res);
+    deliver(req, {
+      contentType: mime.lookup(pathname)
+    }).pipe(res);
   };
 };
