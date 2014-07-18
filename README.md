@@ -1,25 +1,23 @@
-# superstatic-routes
+# static-router
 
 Superstatic custom routes middleware
 
 ## Install
 
 ```
-npm install superstatic-routes --save
+npm install static-router --save
 ```
 
 ## Usage
 
-As a Connect/Express middleware
-
 ```js
 var http = require('http');
 var connect = require('connect');
-var routes = require('superstatic-routes');
+var router = require('static-router');
 
 var app = connect();
 
-app.use(routes({
+app.use(router({
   '/some-route': '/some-file.html',
   '**': '/index.html'
 }));
@@ -29,26 +27,12 @@ http.createServer(app).listen(3000, function () {
 });
 ```
 
-In Superstatic
+### router(routes[, options])
 
-```js
-var superstatic = require('superstatic');
-
-var app = superstatic({
-  // this config object can also just be the superstatic.json file
-  // See https://github.com/divshot/superstatic#configuration
-  config: {
-    routes: {
-      '/some-route': '/some-file.html',
-      '/**': '/index.html'
-    }
-  }
-});
-
-app.listen(3000, function (err) {
-
-});
-```
+* `routes` - object containing globs as keys and target static files and values
+* `options`
+  * `root` - the root directory of the static files
+  * `index` - name of the default directory index file. Defaults to `index.html`
 
 ## Run Tests
 

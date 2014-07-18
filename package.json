@@ -1,6 +1,6 @@
 {
-  "name": "superstatic-routes",
-  "version": "0.1.2",
+  "name": "static-router",
+  "version": "0.2.0",
   "description": "Superstatic custom routes middleware",
   "main": "index.js",
   "directories": {
@@ -11,20 +11,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:divshot/superstatic-routes.git"
+    "url": "git@github.com:divshot/static-router.git"
   },
   "keywords": [
     "divshot",
     "superstatic",
     "routes",
-    "static"
+    "static",
+    "router",
+    "static server"
   ],
   "author": "Divshot",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/divshot/superstatic-routes/issues"
+    "url": "https://github.com/divshot/static-router/issues"
   },
-  "homepage": "https://github.com/divshot/superstatic-routes",
+  "homepage": "https://github.com/divshot/static-router",
   "devDependencies": {
     "chai": "^1.9.1",
     "connect": "^3.0.2",

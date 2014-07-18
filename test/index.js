@@ -1,4 +1,4 @@
-var customRoutes = require('../');
+var router = require('../');
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
@@ -18,7 +18,7 @@ describe('custom route middleware', function() {
     fs.writeFileSync('.tmp/index.html', 'test', 'utf8');
     
     var app = connect()
-      .use(customRoutes({
+      .use(router({
         '/test1': '/index.html'
       }, {
         root: '.tmp'
@@ -36,7 +36,7 @@ describe('custom route middleware', function() {
     fs.writeFileSync('.tmp/test/dir/index.html', 'test', 'utf8');
     
     var app = connect()
-      .use(customRoutes({
+      .use(router({
         '/test3': '.tmp/test/dir'
       }));
     
@@ -52,7 +52,7 @@ describe('custom route middleware', function() {
     fs.writeFileSync('.tmp/public/index.html', 'test', 'utf8');
     
     var app = connect()
-      .use(customRoutes({
+      .use(router({
         '/test1': '/index.html'
       }, {
         root: '.tmp/public'
@@ -67,7 +67,7 @@ describe('custom route middleware', function() {
   
   it('skips the middleware if there is no custom route', function (done) {
     var app = connect()
-      .use(customRoutes());
+      .use(router());
     
     request(app)
       .get('/no-route')
@@ -77,7 +77,7 @@ describe('custom route middleware', function() {
   
   it('skips the middleware if the custom route is for a file that does not exist', function (done) {
     var app = connect()
-      .use(customRoutes({
+      .use(router({
         '/test1': '/index.html'
       }));
     
@@ -93,7 +93,7 @@ describe('custom route middleware', function() {
       fs.writeFileSync('.tmp/index.html', 'test', 'utf8');
       
       var app = connect()
-        .use(customRoutes({
+        .use(router({
           '**': '/index.html'
         }, {
           root: '.tmp'
@@ -111,7 +111,7 @@ describe('custom route middleware', function() {
       fs.writeFileSync('.tmp/index.html', 'test', 'utf8');
       
       var app = connect()
-        .use(customRoutes({
+        .use(router({
           '/subdir/**': '/index.html'
         }, {
           root: '.tmp'
@@ -127,7 +127,7 @@ describe('custom route middleware', function() {
     it('overrides the exists method', function (done) {
       var existsCalled = false;
       var app = connect()
-        .use(customRoutes({
+        .use(router({
           '/test': '/index.html'
         }, {
           exists: function () {
