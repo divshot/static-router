@@ -1,7 +1,7 @@
 {
   "name": "static-router",
   "version": "0.2.0",
-  "description": "Superstatic custom routes middleware",
+  "description": "Express/Connect middleware to server static files based on glob-like routes.",
   "main": "index.js",
   "directories": {
     "test": "test"

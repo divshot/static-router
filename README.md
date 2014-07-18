@@ -1,6 +1,6 @@
 # static-router
 
-Superstatic custom routes middleware
+Express/Connect middleware to server static files based on glob-like routes.
 
 ## Install
 
