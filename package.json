@@ -1,6 +1,6 @@
 {
   "name": "static-router",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Express/Connect middleware to server static files based on glob-like routes.",
   "main": "index.js",
   "directories": {

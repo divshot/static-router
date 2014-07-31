@@ -24,13 +24,20 @@ module.exports = function (routeDefinitions, options) {
     if (!filepath) return next();
     
     filepath = directoryIndex(filepath, indexFile);
-    var fullpath = path.join(root, filepath);
     
     if (!fileExists(filepath, {root: root})) return next();
+    req.url = filepath;
     
-    req.url = fullpath;
+    if (options.fullPath) {
+      var p = options.fullPath(filepath);
+      root = p.root;
+      req.url = p.pathname;
+    }
+    
     deliver(req, {
-      contentType: mime.lookup(pathname)
+      root: root,
+      index: indexFile,
+      contentType: mime.lookup(filepath)
     }).pipe(res);
   };
 };

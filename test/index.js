@@ -143,5 +143,31 @@ describe('custom route middleware', function() {
         })
         .end(done);
     });
+    
+    it('overrides the fullPath method', function (done) {
+      var fullPathCalled = false;
+      var app = connect()
+        .use(router({
+          '/route': '/index.html'
+        }, {
+          exists: function () {
+            return true;
+          },
+          fullPath: function (pathname) {
+            fullPathCalled = true;
+            return {
+              root: '/',
+              pathname: pathname
+            }
+          }
+        }));
+      
+      request(app)
+        .get('/route')
+        .expect(function () {
+          expect(fullPathCalled).to.equal(true);
+        })
+        .end(done);
+    });
   });
 });
