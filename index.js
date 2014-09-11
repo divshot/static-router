@@ -34,7 +34,7 @@ module.exports = function (routeDefinitions, options) {
       req.url = p.pathname;
     }
     
-    deliver(req, {
+    deliver(req, res, {
       root: root,
       index: indexFile,
       contentType: mime.lookup(filepath)
