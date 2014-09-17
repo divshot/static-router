@@ -37,7 +37,8 @@ module.exports = function (routeDefinitions, options) {
     deliver(req, res, {
       root: root,
       index: indexFile,
-      contentType: mime.lookup(filepath)
+      contentType: mime.lookup(filepath),
+      headers: options.headers
     }).pipe(res);
   };
 };
