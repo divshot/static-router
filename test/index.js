@@ -8,12 +8,15 @@ var request = require('supertest');
 var expect = require('chai').expect;
 
 describe('custom route middleware', function() {
+  
   afterEach(function (done) {
+    
     if (fs.existsSync('.tmp')) rmdir('.tmp', done);
     else done()
   });
   
   it('serves the mapped route file for a custom route', function (done) {
+    
     mkdirp.sync('.tmp');
     fs.writeFileSync('.tmp/index.html', 'test', 'utf8');
     
@@ -32,6 +35,7 @@ describe('custom route middleware', function() {
   });
   
   it('serves the index file of a directory if mapped route is mapped to a directory', function (done) {
+    
     mkdirp.sync('.tmp/test/dir');
     fs.writeFileSync('.tmp/test/dir/index.html', 'test', 'utf8');
     
@@ -48,6 +52,7 @@ describe('custom route middleware', function() {
   });
   
   it('serves the mapped route file for a custom route with a declared root', function (done) {
+    
     mkdirp.sync('.tmp/public');
     fs.writeFileSync('.tmp/public/index.html', 'test', 'utf8');
     
@@ -66,6 +71,7 @@ describe('custom route middleware', function() {
   });
   
   it('skips the middleware if there is no custom route', function (done) {
+    
     var app = connect()
       .use(router());
     
@@ -76,6 +82,7 @@ describe('custom route middleware', function() {
   });
   
   it('skips the middleware if the custom route is for a file that does not exist', function (done) {
+    
     var app = connect()
       .use(router({
         '/test1': '/index.html'
@@ -88,7 +95,9 @@ describe('custom route middleware', function() {
   });
   
   describe('glob matching', function() {
+    
     it('maps all paths to the same pathname', function (done) {
+      
       mkdirp.sync('.tmp');
       fs.writeFileSync('.tmp/index.html', 'test', 'utf8');
       
@@ -107,6 +116,7 @@ describe('custom route middleware', function() {
     });
     
     it('maps all requests to files in a given directory to the same pathname', function (done) {
+      
       mkdirp.sync('.tmp/subdir');
       fs.writeFileSync('.tmp/index.html', 'test', 'utf8');
       
@@ -125,6 +135,7 @@ describe('custom route middleware', function() {
     });
     
     it('overrides the exists method', function (done) {
+      
       var existsCalled = false;
       var app = connect()
         .use(router({
@@ -139,21 +150,25 @@ describe('custom route middleware', function() {
       request(app)
         .get('/test')
         .expect(function () {
+          
           expect(existsCalled).to.equal(true);
         })
         .end(done);
     });
     
     it('overrides the fullPath method', function (done) {
+      
       var fullPathCalled = false;
       var app = connect()
         .use(router({
           '/route': '/index.html'
         }, {
           exists: function () {
+            
             return true;
           },
           fullPath: function (pathname) {
+            
             fullPathCalled = true;
             return {
               root: '/',
@@ -165,6 +180,7 @@ describe('custom route middleware', function() {
       request(app)
         .get('/route')
         .expect(function () {
+          
           expect(fullPathCalled).to.equal(true);
         })
         .end(done);
