@@ -1,6 +1,5 @@
-var fs = require('fs');
 var path = require('path');
-var slash = require('slasher');
+var toxic = require('toxic');
 var globject = require('globject');
 var url = require('fast-url-parser');
 var deliver = require('deliver');
@@ -9,6 +8,7 @@ var fileExists = require('file-exists');
 var mime = require('mime-types');
 
 module.exports = function (routeDefinitions, options) {
+  
   options = options || {};
   
   var root = options.root || process.cwd();
@@ -17,15 +17,25 @@ module.exports = function (routeDefinitions, options) {
   if(options.exists) fileExists = options.exists;
   
   return function (req, res, next) {
+    
+    if (!routeDefinitions) {
+      return next();
+    }
+    
     var pathname = url.parse(req.url).pathname;
     var routes = globject(slash(routeDefinitions));
-    var filepath = routes(slash(pathname));
+    var filepath = routes(normalize(pathname));
     
-    if (!filepath) return next();
+    if (!filepath) {
+      return next();
+    }
     
     filepath = directoryIndex(filepath, indexFile);
     
-    if (!fileExists(filepath, {root: root})) return next();
+    if (!fileExists(filepath, {root: root})) {
+      return next();
+    }
+    
     req.url = filepath;
     
     if (options.fullPath) {
@@ -42,3 +52,25 @@ module.exports = function (routeDefinitions, options) {
     }).pipe(res);
   };
 };
+
+function slash (spec) {
+  
+  return toxic(spec, {
+    mutator: function (pathname) {
+      
+      return normalize(pathname);
+    },
+    keyMutator: function (key) {
+      
+      if (key.charAt(0) === '!') {
+        return '!' + normalize(key.substr(1));
+      }
+      
+      return normalize(key);
+    }
+  });
+}
+
+function normalize (value) {
+  return path.normalize(path.join('/', value));
+}

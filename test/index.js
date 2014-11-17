@@ -134,6 +134,25 @@ describe('custom route middleware', function() {
         .end(done);
     });
     
+    it('routes requests that do not match a glob to a given file', function (done) {
+    
+      mkdirp.sync('.tmp/subdir');
+      fs.writeFileSync('.tmp/index.html', 'test', 'utf8');
+      
+      var app = connect()
+        .use(router({
+          '!subdir/**': '/index.html'
+        }, {
+          root: '.tmp'
+        }));
+      
+      request(app)
+        .get('/not-subdir/anything/here')
+        .expect(200)
+        // .expect('test')
+        .end(done);
+    });
+    
     it('overrides the exists method', function (done) {
       
       var existsCalled = false;
