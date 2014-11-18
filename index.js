@@ -1,12 +1,11 @@
 var path = require('path');
-var toxic = require('toxic');
 var globject = require('globject');
 var url = require('fast-url-parser');
 var deliver = require('deliver');
 var directoryIndex = require('directory-index');
 var fileExists = require('file-exists');
 var mime = require('mime-types');
-var globSlash = require('glob-slash');
+var slasher = require('glob-slasher');
 
 module.exports = function (routeDefinitions, options) {
   
@@ -24,8 +23,8 @@ module.exports = function (routeDefinitions, options) {
     }
     
     var pathname = url.parse(req.url).pathname;
-    var routes = globject(slash(routeDefinitions));
-    var filepath = routes(globSlash.normalize(pathname));
+    var routes = globject(slasher(routeDefinitions));
+    var filepath = routes(slasher(pathname));
     
     if (!filepath) {
       return next();
@@ -53,11 +52,3 @@ module.exports = function (routeDefinitions, options) {
     }).pipe(res);
   };
 };
-
-function slash (spec) {
-  
-  return toxic(spec, {
-    mutator: globSlash.normalize,
-    keyMutator: globSlash
-  });
-}
