@@ -6,6 +6,7 @@ var deliver = require('deliver');
 var directoryIndex = require('directory-index');
 var fileExists = require('file-exists');
 var mime = require('mime-types');
+var globSlash = require('glob-slash');
 
 module.exports = function (routeDefinitions, options) {
   
@@ -24,7 +25,7 @@ module.exports = function (routeDefinitions, options) {
     
     var pathname = url.parse(req.url).pathname;
     var routes = globject(slash(routeDefinitions));
-    var filepath = routes(normalize(pathname));
+    var filepath = routes(globSlash.normalize(pathname));
     
     if (!filepath) {
       return next();
@@ -56,21 +57,7 @@ module.exports = function (routeDefinitions, options) {
 function slash (spec) {
   
   return toxic(spec, {
-    mutator: function (pathname) {
-      
-      return normalize(pathname);
-    },
-    keyMutator: function (key) {
-      
-      if (key.charAt(0) === '!') {
-        return '!' + normalize(key.substr(1));
-      }
-      
-      return normalize(key);
-    }
+    mutator: globSlash.normalize,
+    keyMutator: globSlash
   });
-}
-
-function normalize (value) {
-  return path.normalize(path.join('/', value));
 }
