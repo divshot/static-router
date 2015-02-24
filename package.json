@@ -1,6 +1,6 @@
 {
   "name": "static-router",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Express/Connect middleware to server static files based on glob-like routes.",
   "main": "index.js",
   "directories": {
@@ -30,6 +30,7 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "connect": "^3.3.3",
+    "fs-extra": "^0.16.3",
     "mkdirp": "^0.5.0",
     "mocha": "^2.0.1",
     "rmdir": "^1.0.4",

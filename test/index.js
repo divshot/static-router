@@ -1,6 +1,6 @@
 var router = require('../');
-var fs = require('fs');
 var path = require('path');
+var fs = require('fs-extra');
 var mkdirp = require('mkdirp');
 var rmdir = require('rmdir');
 var connect = require('connect');
@@ -205,4 +205,55 @@ describe('custom route middleware', function() {
         .end(done);
     });
   });
+
+  describe('uses first match', function () {
+      
+      var app;
+      
+      beforeEach(function () {
+        
+        fs.outputFileSync('.tmp/admin/index.html', 'admin index', 'utf8');
+        fs.outputFileSync('.tmp/index.html', 'index', 'utf8');
+        
+        app = connect()
+          .use(router({
+            "/admin/**": "/admin/index.html",
+            "**": "index.html"
+          }, {
+            root: '.tmp'
+          }));
+      });
+      
+      afterEach(function () {
+        
+        fs.removeSync('.tmp');
+      });
+      
+      it('first route with 1 depth route', function (done) {
+        
+        request(app)
+          .get('/admin/test')
+          .expect(200)
+          .expect('admin index')
+          .end(done);
+      });
+      
+      it('first route with 2 depth route', function (done) {
+        
+        request(app)
+          .get('/admin/anything/else')
+          .expect(200)
+          .expect('admin index')
+          .end(done);
+      });
+      
+      it('second route', function (done) {
+        
+        request(app)
+          .get('/anything')
+          .expect(200)
+          .expect('index')
+          .end(done);
+      });
+    });
 });
