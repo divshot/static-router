@@ -216,10 +216,10 @@ describe('custom route middleware', function() {
         fs.outputFileSync('.tmp/index.html', 'index', 'utf8');
         
         app = connect()
-          .use(router({
-            "/admin/**": "/admin/index.html",
-            "**": "index.html"
-          }, {
+          .use(router([
+            {"/admin/**": "/admin/index.html"},
+            {"**": "index.html"}
+          ], {
             root: '.tmp'
           }));
       });

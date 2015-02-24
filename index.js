@@ -6,6 +6,7 @@ var directoryIndex = require('directory-index');
 var fileExists = require('file-exists');
 var mime = require('mime-types');
 var slasher = require('glob-slasher');
+var slash = require('glob-slash');
 
 module.exports = function (routeDefinitions, options) {
   
@@ -23,7 +24,24 @@ module.exports = function (routeDefinitions, options) {
     }
     
     var pathname = url.parse(req.url).pathname;
-    var routes = globject(slasher(routeDefinitions));
+    var defs = {};
+    
+    // Ensure order of routes when given an array
+    if (Array.isArray(routeDefinitions)) {
+      routeDefinitions
+        .forEach(function (routes) {
+          
+          Object.keys(routes).forEach(function (key) {
+            
+            defs[key] = routes[key];
+          })
+        });
+    }
+    else {
+      defs = routeDefinitions;
+    }
+  
+    var routes = globject(slasher(defs));
     var filepath = routes(slasher(pathname));
     
     if (!filepath) {
